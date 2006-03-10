@@ -1,0 +1,4 @@
+SetEnvIf Referer "ajaxchat.htm" local_referal
+Order Deny,Allow
+Deny from all
+Allow from env=local_referal

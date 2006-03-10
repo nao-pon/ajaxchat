@@ -1,0 +1,266 @@
+@charset "shift_jis";
+/* this @charset is for mozilla's bug */
+
+.{
+	-moz-box-sizing:border-box;
+	box-sizing:border-box;
+	padding:0px;
+	margin:0px;
+}
+body {
+	font-size:12px;
+	margin:0px;
+	padding:0px;
+	color: black;
+	overflow:hidden;
+	background-color:transparent;
+	font-family: Osaka,sans-serif,verdana,chicago,Arial,Helvetica;
+}
+div,table,tr,td {
+	/*margin:0px;*/
+	/*padding:0px;*/
+	font-family: Osaka,sans-serif,verdana,chicago,Arial,Helvetica;
+}
+img{
+	vertical-align: text-bottom;
+}
+form {
+	margin:0px;
+}
+textarea {
+	padding: 2px;
+}
+.toall {
+	border: gray solid 1px
+}
+.whisper {
+	border: red solid 1px;
+}
+p {
+	margin: 3px 10px;
+	line-height: 1.2em;
+}
+input, textarea, td {
+	font-size:12px;
+}
+td {
+	padding: 0px 2px 0px 2px;
+	line-height: 1.2em;
+}
+
+fieldset {
+	display:inline;
+}
+
+ul {
+	padding-left:10px;
+	margin-left:10px;
+	list-style-type: circle;
+	list-style-position: outside
+}
+li {
+	margin-left:0px;
+	padding-left:0px;
+	
+}
+div#morelog {
+	text-align:right;
+	padding-right:5px;
+}
+
+#face{
+	position:absolute;
+	visibility:hidden;
+	top:0px;
+	left:0px;
+	background-color:white;
+	padding:2px;
+	border: 1px solid gray;
+}
+
+#color{
+	width:303px;
+	height:67px;
+	position:absolute;
+	visibility:hidden;
+	top:-10px;
+	left:0px;
+	border: 1px solid gray;
+	padding: 1px;
+	/*background-color: transparent;*/
+	background-color: white;
+	z-index: 100;
+}
+
+#setting{
+	position:absolute;
+	visibility:hidden;
+	top:20px;
+	left:5px;
+	border: 1px solid gray;
+	padding: 3px;
+	/*background-color: transparent;*/
+	background-color: white;
+	z-index: 100;
+}
+
+#infobox{
+	position:absolute;
+	visibility:hidden;
+	top:20px;
+	left:5px;
+	border: 1px solid gray;
+	padding: 3px;
+	/*background-color: transparent;*/
+	background-color: white;
+	z-index: 100;
+}
+
+#colorset{
+	padding:3px 1px 2px 4px;
+	background-color:#ffffff;
+	border: 1px solid gray;
+	cursor: pointer;
+}
+
+#log td {
+	padding-bottom:2px;
+	word-break: break-all;
+	vertical-align:top;
+	/*white-space: normal;*/
+}
+#logbase {
+	/*width:100%;*/
+	height:210px;
+	overflow:auto;
+	white-space: normal;
+	font-size:12px;
+	background-color:white;
+	margin:0px;
+	padding:0px;
+	position:relative;
+}
+#formbase {
+	margin:0px;
+	padding:5px;
+	position:relative;
+}
+#stay {
+	text-align:left;
+	background-color: #FFE1FF;
+	color: #8A2BE2;
+	margin:0px;
+}
+#welcome {
+	border-top: dotted 1px gray;
+	padding: 3px 10px 0px 0px;
+	text-align: left;
+}
+div.stay_top {
+
+}
+div.stay_right {
+	float: right;
+	width: 100px;
+	word-break: break-all;
+	white-space: normal;
+	overflow:hidden;
+}
+div.stay_r_header{
+	text-align:center;
+}
+div.stay_r_menber{
+	background-color:white;
+	text-align:center;
+	overflow:auto;
+}
+div.stay_r_footer{
+	text-align:center;
+}
+
+#logtable {
+	width:100%;
+	border:none;
+}
+
+#last {
+	text-align:center;
+	background-color: #CAFFCA;
+	color: #2E8B57;
+	margin:0px;
+}
+
+#tip {
+	padding: 2px;
+	background-color: white;
+	color: red;
+	cursor: pointer;
+}
+
+span.link {
+	background:#FF6A6A;
+	color:#FFEC8B;
+	padding:4px;
+	font-weight:normal;
+	font-size:10px;
+}
+span.link2 {
+	background:#FF6A6A;
+	color:#9AFF9A;
+	padding:4px;
+	font-weight:normal;
+	font-size:10px;
+}
+span.wait {
+	background:#FF6A6A;
+	color:#FFF;
+	padding:4px;
+	font-weight:normal;
+	font-size:10px;
+}
+span.name {
+	color:#008B8B;
+	cursor: pointer;
+	/*font-weight:bold;*/
+}
+span.stay_name {
+	/*color:#008B8B;*/
+	cursor: pointer;
+	font-weight:bold;
+}
+span.toname {
+	color:#008B8B;
+}
+span.info {
+	color:gray;
+}
+span.box {
+	border: 1px solid gray;
+	padding: 2px 3px 1px 3px;
+	vertical-align: bottom;
+}
+span.box input{
+	height: 13px;
+	width : 13px;
+	vertical-align: bottom;
+}
+span.filter{
+	text-decoration: line-through;
+	color: #FFA500;
+}
+span.talkto{
+	background-color: #8A2BE2;
+	color: #FFFFFF;
+}
+span.trip{
+	font-size: 9px;
+	color: gray;
+}
+.color0 {color:gray;}
+.color1 {color:navy;}
+.color2 {color:black;}
+.color3 {color:green;}
+.color4 {color:olive;}
+.color5 {color:teal;}
+.color6 {color:purple;}
+.color7 {color:maroon;}
