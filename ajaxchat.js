@@ -4,7 +4,7 @@
 // Based on http://la.ma.la/blog/diary_200507290022.htm
 // by 最速インターフェース研究会
 
-var version = 2.31;
+var version = 2.32;
 
 // 設定値用変数
 var refresh0 = 60000;     //ログチェック間隔(入室前) [ms]
