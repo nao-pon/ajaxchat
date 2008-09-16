@@ -123,7 +123,6 @@ if ($cmd == "kick" || $kickdat_time >= $kicklog_time)
 		{
 			flock($fp,LOCK_EX);
 			fwrite($fp,join("\n",$_denys));
-			flock($fp,LOCK_UN);
 			fclose($fp);
 		}
 	}
@@ -162,7 +161,6 @@ if ($kick_write)
 		{
 			flock($fp,LOCK_EX);
 			fwrite($fp,serialize($kicks));
-			flock($fp,LOCK_UN);
 			fclose($fp);
 		}
 	}
@@ -227,6 +225,12 @@ if ($id && ($comment || $cmd))
 			$fsize = filesize($logfile);
 			$logfull = ($fsize && $fsize > LOG_FILE_MAX)? ture : false;
 			
+			if ($logfull)
+			{
+				$bakfile = "./bak/bak_".$id."_".time().".utxt";
+				copy($logfile, $bakfile);
+			}
+			
 			$mode = ($logfull)? "a+b" : "ab";
 			if ($fp = fopen($logfile, $mode))
 			{
@@ -234,8 +238,6 @@ if ($id && ($comment || $cmd))
 				
 				if ($logfull)
 				{
-					$bakfile = "./bak/bak_".$id."_".time().".utxt";
-					copy($logfile,$bakfile);
 					fseek ($fp, $fsize - LOG_FILE_MIN);
 					$newlog = fread ($fp,LOG_FILE_MIN);
 					list($tmp, $newlog) = explode("\n", $newlog, 2);
@@ -244,7 +246,6 @@ if ($id && ($comment || $cmd))
 				}
 				
 				fwrite($fp,$data);
-				flock($fp,LOCK_UN);
 				fclose($fp);
 			}
 		}
