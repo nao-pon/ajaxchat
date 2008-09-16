@@ -1,21 +1,21 @@
 // AjaxChat - ajaxchat.js by XOOPSマニア(nao-pon)
-// XOOPSマニア: http://hypweb.net/xoops/
+// XOOPSマニア: http://xoops.hypweb.net/
 //
 // Based on http://la.ma.la/blog/diary_200507290022.htm
 // by 最速インターフェース研究会
 
-var version = 2.32;
+var version = 2.33;
 
 // 設定値用変数
 var refresh0 = 60000;     //ログチェック間隔(入室前) [ms]
 var refresh = 2000;       //ログチェック間隔(入室後) [ms]
 var stayref = 60000;      //在室確認間隔 [ms]
 var read = 5000;          //最初に読み込むログのサイズ [bite]
-var noname = "名無し";    //名前を入力していない人の仮名
 var need_refrash = 50000  //リフレッシュを促すログ文字数 [character]
 var max_post_size = 1000  //発言一回あたりの最大文字数 [character]
 
 // 変数の初期化
+var noname = '';
 var QueryString = new Array();
 CreateQuetyStringList();
 var stays = new Array();
@@ -47,7 +47,6 @@ var logstart;
 var logend;
 var bef_name = "";
 var getcounter = 0;
-var msg = new Array;
 var tag = new Array;
 var sound = new Array();
 var filter = new Array();
@@ -58,74 +57,34 @@ flg['popup'] = (!parseInt(QueryString["popup"]))? 0 : 1;
 flg['stay'] = (!parseInt(QueryString["stay"]))? 0 : 1;
 flg['show_welcome'] = false;
 
+// cookie 保存のため、ドメインをスーパー・ドメイン方向に緩める
+if (
+ document.domain.match(/\.(?:com|net|org|edu|gov|mil|int|biz|info|name|pro|museum|aero|coop|jobs|travel|mobi|cat|tel|asia)$/i)
+  ||
+ ! document.domain.match(/(?:ac|co|go|or|ad|ne|gr|ed|lg)\.jp/i)
+	) {
+	document.domain = document.domain.replace(/^(?:.+\.)?([^.]+\.[^.]+)$/,"$1");
+} else {
+	document.domain = document.domain.replace(/^(?:.+\.)?([^.]+\.[^.]+\.[^.]+)$/,"$1");
+}
+
 // メッセージ
-msg['welcome'] = '<ul><li>このログ表示窓は、入室前は <b>'+(refresh0/1000)+'</b> 秒ごと、入室後は <b>'+(refresh/1000)+'</b> 秒ごとに更新されます。</li><li>特定の人にだけ<span style="color:red;"> ささやく </span>には、名前をクリックしてください。</li><li>特定の人を無視リストに追加・解除するには、名前をダブルクリックしてください。</li><li>名前欄にはトリップが使えます。[ <span style="color:blue;">名前</span><span style="color:red;">#</span><span style="color:green;">内緒の言葉</span> ] とすると成りすましを防ぐことができます。</li><li>不特定多数が使うパソコンからアクセスしている場合は、<a href="javascript:setting(\'open\')" title="詳細設定">詳細設定<img src="./imgs/setting.png" width="16" height="16" border="0"></a>で Cookie「保存する」のチェックを外してください。</li></ul>';
-msg['howto'] = '入室するには、名前欄に記名してこの入力エリアをクリックしてください。';
-msg['noopera'] = '残念ながら ブラウザ Opera では利用できません。';
-msg['stay_init'] = "閲覧者: 初回は"+(stayref/1000/2)+"秒後に情報取得します。";
-msg['stay_refresh'] = "今すぐ取得";
-msg['pastfor'] = 'この間に$1時間ほど経ちました・・・';
-msg['ininfo'] = '$1さんが入りました。';
-msg['outinfo'] = '$1さんが退席しました。';
-msg['passinfo'] = '$1さんが通り過ぎました。';
-msg['sysinfo'] = 'システム通知[$1]';
-msg['needupdate'] = '<span style="color:red;">チャットプログラムが更新されています。<br><a href="javascript:window_reload()">このリンクをクリックしてバージョンアップしてください。</a></span>';
-msg['nomail'] = '[ ログ表示ではメールアドレスは表示しません ]';
-msg['morelog'] = 'さらに過去の発言を表示';
-msg['whisper'] = 'ささやき';
-msg['clearwhisper'] = msg['whisper']+': チャット画面の名前をクリック。ここをクリックでクリア';
-msg['click2whisper'] = "クリック: "+msg['whisper']+"\nダブルクリック: 無視リスト";
-msg['toall'] = ' 全員';
-msg['to'] = '<img src="./imgs/whisper.png" height="16" width="17" alt="'+msg['clearwhisper']+'" title="'+msg['clearwhisper']+'">&nbsp;$1へ';
-msg['novoice'] = '最終発言: 発言はありません。';
-msg['bef_sec'] = '秒前';
-msg['bef_min'] = '分前';
-msg['hour'] = '時間';
-msg['last_voice'] = '最終発言: ';
-msg['refresh'] = 'リフレッシュ';
-msg['refresh_msg'] = 'ログ表示が増えてブラウザの動作が重くなったらクリックしてください。';
-msg['com'] = '通信中';
-msg['wait'] = '待機中';
-msg['com_status'] = '通信状態';
-msg['nomember'] = '入室 0人,';
-msg['menber'] = '閲覧 $1人';
-msg['rom'] = ' 見物 $1人';
-msg['in_rom'] = 'IN $1 : ROM $2';
-msg['leave'] = '$1 退席';
-msg['error_post'] = 'データの送信に失敗しました。';
-msg['error_set'] = '挿入する位置を指定してください。';
-msg['close'] = '閉じる';
-msg['popup'] = '別窓';
-msg['popuping'] = '<center>別窓にてポップアップ中です。$1で元に戻ります。</center>';
-msg['popup_msg'] = 'チャットウィンドウのみをポップアップします。';
-msg['noref'] = '<p>ノートンなどのセキュリティソフトでリファラ(参照元)情報を送信しないように設定されているので利用できません。<br>以下のリンクを参考に参照元情報を送信するように設定してください。</p><p><ul><li><a href="http://service1.symantec.com/SUPPORT/INTER/nisjapanesekb.nsf/jp_docid/20031024163125947?Open&src=&docid=20021020160209947&nsf=support%5CINTER%5Cnisjapanesekb.nsf&view=jp_docid&dtype=&prod=&ver=&osv=&osv_lvl=" target="_blank">Norton Internet Security 2004 / Norton Personal Firewall 2004 の場合</a></li><li><a href="http://service1.symantec.com/SUPPORT/INTER/nisjapanesekb.nsf/jp_docid/20021020160209947?Open&src=&docid=20031024163125947&nsf=support%5CINTER%5Cnisjapanesekb.nsf&view=jp_docid&dtype=&prod=&ver=&osv=&osv_lvl=" target="_blank">Norton Internet Security 2003/Norton Personal Firewall 2003 の場合</a></li><li><a href="http://service1.symantec.com/SUPPORT/INTER/nisjapanesekb.nsf/jp_docid/20020617223337947?Open&src=&docid=20021020160209947&nsf=support%5CINTER%5Cnisjapanesekb.nsf&view=jp_docid&dtype=&prod=&ver=&osv=&osv_lvl=" target="_blank">Norton Internet Security 2001、2002 / Norton Personal Firewall 2001、2002 の場合</a></li></ul></p>';
-msg['setting'] = '詳細設定';
-msg['last_init'] = '最終発言: ログを読み込んでいます...';
-msg['click2face'] = 'クリックでフェイスマークを選択して挿入';
-msg['click2color'] = 'クリックで文字色設定';
-msg['color'] = '文字色';
-msg['talk'] = '発言';
-msg['setcolor'] = 'この色にセット';
-msg['autotalk'] = '自動発言';
-msg['sending'] = '送信しています.....';
-msg['space'] = 'スペース';
-msg['sound'] = 'サウンド';
-msg['in'] = '入室';
-msg['out'] = '退席';
-msg['save'] = '保存する';
-msg['info'] = '[お知らせ]';
-msg['info_sign'] = 'お知らせ表示';
-msg['elapsed_time'] = '経過時間';
-msg['colorclear'] = '色指定を解除';
-msg['addfilter'] = '$1を無視リストに追加して発言を表示しないようにしますか？';
-msg['delfilter'] = '$1を無視リストから外して発言を表示するようにしますか？';
-msg['stay2top'] = '閲覧者情報を上へ表示';
-msg['stay2right'] = '閲覧者情報を右サイドへ表示';
-msg['wish_refrash'] = '_PAGE_TITLE_: チャット [お知らせ]\n表示しているログが増えてきました。\nブラウザが不安定になる前にリフレッシュしますか？';
-msg['to_large_post'] = '発言の文字数が多過ぎます。\n最大文字数は'+max_post_size+'文字です。\n\n発言内容を削って発言しますか？';
-msg['kick_req'] = '[ キック申請 ]\n$1 のキック(発言禁止措置)を申請しますか？\nキック申請が一定数に達すると、その人は発言禁止になります。\n::注意:: 悪戯にキック申請を行うとあなた自身が発言禁止になりますので、乱用はしないでください。';
-msg['kick_done'] = '$1 のキック申請が完了しました。'
-msg['kick'] = 'キック申請'
+var msg = new Array;
+var lang;
+if (! QueryString["lang"]) {
+	if(document.all) {
+		lang = (navigator.userLanguage || navigator.browserLanguage);
+	} else {
+		lang = navigator.language;
+	}
+} else {
+	lang = QueryString["lang"];
+}
+lang = lang.substr(0,2);
+if (! lang.match(/(en|ja)/)) {
+	lang = 'en';
+}
+document.write ('<script type="text/javascript" src="lang/'+lang+'.js"></script>');
 
 // 効果音
 sound['in'] = "./sounds/login.swf";
@@ -133,6 +92,9 @@ sound['out'] = "./sounds/logout.swf";
 sound['newline'] = "./sounds/newline.swf";
 sound['toyou'] = "./sounds/toyou.swf";
 
+
+function set_html() {
+noname = msg['noname'];
 // HTMLタグ
 // フェイスマーク
 tag['face'] =
@@ -159,7 +121,7 @@ tag['info'] = "<img src=\"./imgs/info.png\" width=\"16\" height=\"16\" border=\"
 //form
 tag['form'] = 
 '<span id="name">'+
-'	お名前:<input type="text" id="n" name="n" maxlength="16" size="14" onfocus="active_elm=this;" disabled>'+
+msg['name']+':<input type="text" id="n" name="n" maxlength="16" size="14" onfocus="active_elm=this;" disabled>'+
 '</span>'+
 '<span style="position:relative;cursor:pointer;">'+
 '	<img src="imgs/smile.gif" width="15" height="15" border="0" onclick="ins_face();" title="'+msg['click2face']+'" alt="'+msg['click2face']+'">'+
@@ -441,7 +403,8 @@ tag['spmap'] =
 '<area shape="rect" coords="289,0,302,13" href="javascript:set_color(\'X\')" title="'+msg['close']+'">'+
 '<area shape="rect" coords="289,53,302,66" href="javascript:set_color(\'C\')" title="'+msg['colorclear']+'">';
 
-tag['scriptinfo'] = '<p>AjaxChat by : <a href="http://hypweb.net/xoops/" target="_blank">XOOPS MANIAC</a> - <a href="http://hypweb.net/xoops/modules/pukiwiki/2211.html" target="_blank">written in nao-pon\'s Blog</a></p>';
+tag['scriptinfo'] = '<p>AjaxChat by : <a href="http://xoops.hypweb.net/" target="_blank">XOOPS MANIAC</a> - <a href="http://xoops.hypweb.net/modules/pukiwiki/2211.html" target="_blank">written in nao-pon\'s Blog</a></p>';
+}
 
 String.prototype.mReplace = function(pat,flag){
 	var temp = this;
@@ -477,6 +440,7 @@ window.onresize = set_logwindow;
 
 function init()
 {
+	set_html();
 	if (window.opera)
 	{
 		flg['opera'] = true;
@@ -509,6 +473,10 @@ function init()
 		if (ck[12]) gid('info_in').checked = (ck[12]==2)? true : false;
 		if (ck[13]) gid('info_out').checked = (ck[13]==2)? true : false;
 		if (ck[14]) gid('info_time').checked = (ck[14]==2)? true : false;
+	}
+	
+	if (!cname && !!QueryString["uname"]) {
+		cname = QueryString["uname"];
 	}
 	
 	name_html = gid('name').innerHTML;
@@ -1161,7 +1129,7 @@ function popup()
 		//	popup_w = showModelessDialog('./ajaxchat.htm?popup=1&id='+logid+'&stay='+flg['stay']+'&staypos='+staypos,(myip.replace(/[^a-z0-9_]+/ig,"") + logid),'screenX:100;screenY:100;left:100;top:100;width:400;height:300;status:1;scrollbars:0;menubar:0;location:0;directions:0;toolbar:0;resizable:1;');
 		//}catch(e){
 		//	alert(e);
-			popup_w = window.open('./ajaxchat.htm?popup=1&id='+logid+'&stay='+flg['stay']+'&staypos='+staypos,(myip.replace(/[^a-z0-9_]+/ig,"") + logid),'screenX=100,screenY=100,left=100,top=100,width=400,height=300,status=1,scrollbars=0,menubar=0,location=0,directions=0,toolbar=0,resizable=1');
+			popup_w = window.open('./ajaxchat.htm?popup=1&id='+logid+'&stay='+flg['stay']+'&staypos='+staypos+'&lang='+lang,(myip.replace(/[^a-z0-9_]+/ig,"") + logid),'screenX=100,screenY=100,left=100,top=100,width=400,height=300,status=1,scrollbars=0,menubar=0,location=0,directions=0,toolbar=0,resizable=1');
 			popup_w.focus();
 		//}
 	}
@@ -1580,6 +1548,7 @@ function reload(opt){
 			if (size) x.setRequestHeader("Range", ["bytes=",size,"-"].join(""));
 			if (mod) x.setRequestHeader("If-Modified-Since", mod);
 			x.setRequestHeader("Referer", "ajaxchat.htm");
+			try{x.overrideMimeType('text/plain; charset=UTF-8');}catch(e){};
 		}
 		else
 		{
@@ -1856,10 +1825,7 @@ function save_cookie(arg1,arg2,arg3,arg4){ //arg1=dataname arg2=data arg3=expira
 			_exp += ";path=/";
 		}
 		
-		if (QueryString['cdu'] == "on")
-		{
-			_exp += ";domain=" + escape(document.domain.replace(/^[^.]+./,""));
-		}
+		_exp += ";domain=" + escape(document.domain);
 		
 		document.cookie = escape(arg1) + "=" + escape(arg2) + _exp + ";";
 	}
@@ -1998,7 +1964,10 @@ function ins_face(v)
 		var se = elm.selectionEnd;
 		var s1 = (elm.value).substring(0,ss);
 		var s2 = (elm.value).substring(se,elm.textLength);
-		var s3 = (elm.value).substring(elm.selectStart, elm.selectEnd);
+		var s3 = '';
+		if (ss && se) {
+			s3 = (elm.value).substring(ss, se);
+		}
 		if (!s1 && !s2 && !s3) s1 = elm.value;
 		elm.value = s1 + s3 + v + s2;
 		se = se + v.length;
