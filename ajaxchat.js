@@ -823,6 +823,11 @@ function write(v,mode,dust)
 			var hour = parseInt((tmp[0] - last_time_tmp + 900)/3600);
 			if (hour >= 1)
 			{
+				if (hour > 24) {
+					hour = parseInt(hour/24) + msg['day'];
+				} else {
+					hour += msg['hour'];
+				}
 				dats[dat_cnt++] =  [
 					"<tr><td style=\"text-align:right;\" nowrap=\"true\">",
 					"</td>",
@@ -1100,6 +1105,11 @@ function set_last()
 		lastref = 6000;
 		sc = msg['hour']+(past%60)+msg['bef_min'];
 		past = parseInt(past/60);
+	}
+	if (past > 24) {
+		lastref = 60000;
+		sc = msg['bef_day'];
+		past = parseInt(past/24);
 	}
 	
 	gid('last_time').innerHTML = msg['last_voice'] + past + sc + " ( "+ Dt + " )";
