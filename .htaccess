@@ -1,4 +1,4 @@
 AddType 'text/plain; charset=UTF-8' utxt
-AddType 'text/html; charset=UTF-8' htm
+AddType 'text/html; charset=UTF-8' htm html
 
 Header set P3P: "CP=\"CURo NOI OUR\""

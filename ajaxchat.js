@@ -4,7 +4,7 @@
 // Based on http://la.ma.la/blog/diary_200507290022.htm
 // by 最速インターフェース研究会
 
-var version = 2.34;
+var version = 2.35;
 
 // 設定値用変数
 var refresh0 = 60000;     //ログチェック間隔(入室前) [ms]
@@ -15,6 +15,7 @@ var need_refrash = 50000  //リフレッシュを促すログ文字数 [characte
 var max_post_size = 1000  //発言一回あたりの最大文字数 [character]
 
 // 変数の初期化
+var AllowLangs = new RegExp('ja|en|es|pt', 'i');
 var noname = '';
 var QueryString = new Array();
 CreateQuetyStringList();
@@ -57,16 +58,18 @@ flg['popup'] = (!parseInt(QueryString["popup"]))? 0 : 1;
 flg['stay'] = (!parseInt(QueryString["stay"]))? 0 : 1;
 flg['show_welcome'] = false;
 
-// cookie 保存のため、ドメインをスーパー・ドメイン方向に緩める
-if (
- document.domain.match(/\.(?:com|net|org|edu|gov|mil|int|biz|info|name|pro|museum|aero|coop|jobs|travel|mobi|cat|tel|asia)$/i)
-  ||
- ! document.domain.match(/(?:ac|co|go|or|ad|ne|gr|ed|lg)\.jp/i)
-	) {
-	document.domain = document.domain.replace(/^(?:.+\.)?([^.]+\.[^.]+)$/,"$1");
-} else {
-	document.domain = document.domain.replace(/^(?:.+\.)?([^.]+\.[^.]+\.[^.]+)$/,"$1");
-}
+try {
+	// cookie 保存のため、ドメインをスーパー・ドメイン方向に緩める
+	if (
+	 document.domain.match(/\.(?:com|net|org|edu|gov|mil|int|biz|info|name|pro|museum|aero|coop|jobs|travel|mobi|cat|tel|asia)$/i)
+	  ||
+	 ! document.domain.match(/(?:ac|co|go|or|ad|ne|gr|ed|lg)\.jp/i)
+		) {
+		document.domain = document.domain.replace(/^(?:.+\.)?([^.]+\.[^.]+)$/,"$1");
+	} else {
+		document.domain = document.domain.replace(/^(?:.+\.)?([^.]+\.[^.]+\.[^.]+)$/,"$1");
+	}
+} finally {}
 
 // メッセージ
 var msg = new Array;
@@ -81,7 +84,7 @@ if (! QueryString["lang"]) {
 	lang = QueryString["lang"];
 }
 lang = lang.substr(0,2);
-if (! lang.match(/(en|ja)/)) {
+if (! lang.match(AllowLangs)) {
 	lang = 'en';
 }
 document.write ('<script type="text/javascript" src="lang/'+lang+'.js"></script>');
@@ -119,7 +122,7 @@ if (!flg['popup'])
 tag['info'] = "<img src=\"./imgs/info.png\" width=\"16\" height=\"16\" border=\"0\" alt=\"Ver "+version+"\" onclick=\"showinfo('open');\" style=\"cursor:pointer;\">&nbsp;";
 
 //form
-tag['form'] = 
+tag['form'] =
 '<span id="name">'+
 msg['name']+':<input type="text" id="n" name="n" maxlength="16" size="14" onfocus="active_elm=this;" disabled>'+
 '</span>'+
@@ -151,8 +154,8 @@ tag['setting']=
 '<fieldset>'+
 '<legend>'+msg['autotalk']+'</legend>'+
 '<input type="checkbox" id="ent" value="on" onclick="c_focus();" checked><label for="ent">Enter</label>'+
-'<input type="checkbox" id="maru" value="on" onclick="c_focus();"><label for="maru">。</label>'+
-'<input type="checkbox" id="ten" value="on" onclick="c_focus();"><label for="ten">、</label>'+
+'<input type="checkbox" id="maru" value="on" onclick="c_focus();"><label for="maru">'+msg['period']+'</label>'+
+'<input type="checkbox" id="ten" value="on" onclick="c_focus();"><label for="ten">'+msg['comma']+'</label>'+
 '<input type="checkbox" id="sp" value="on" onclick="c_focus();"><label for="sp">'+msg['space']+'</label>'+
 '</fieldset> '+
 '<fieldset>'+
@@ -176,7 +179,7 @@ tag['setting']=
 tag['stay2right'] = '<div style="float:right;width:14px;height:14px;border:none;" title="'+msg['stay2right']+'"><a href="javascript:stay_pos(\'r\')"><img src="./imgs/to_right.png" width="14" height="14" border="0"></a></div>';
 tag['stay2top'] = '<div style="float:right;width:14px;height:14px;border:none;" title="'+msg['stay2top']+'"><a href="javascript:stay_pos(\'t\')"><img src="./imgs/to_top.png" width="14" height="14" border="0"></a></div>';
 // spmap
-tag['spmap'] = 
+tag['spmap'] =
 '<area shape="rect" coords="1,1,7,10" href="javascript:set_color(\'#00ff00\')">'+
 '<area shape="rect" coords="9,1,15,10" href="javascript:set_color(\'#00ff33\')">'+
 '<area shape="rect" coords="17,1,23,10" href="javascript:set_color(\'#00ff66\')">'+
@@ -445,9 +448,9 @@ function init()
 	{
 		flg['opera'] = true;
 	}
-	
+
 	build();
-	
+
 	var cname = "";
 	if (flg['stay']) gid('btn_send').disabled = false;
 	gid('c').disabled = false;
@@ -455,7 +458,7 @@ function init()
 	gid('tip').className = "toall";
 	gid('n').disabled = false;
 	flg['islogtop'] = true;
-	
+
 	if (ck = load_cookie("ajaxchat"))
 	{
 		if (ck[0]) cname = ck[0];
@@ -474,26 +477,26 @@ function init()
 		if (ck[13]) gid('info_out').checked = (ck[13]==2)? true : false;
 		if (ck[14]) gid('info_time').checked = (ck[14]==2)? true : false;
 	}
-	
+
 	if (!cname && !!QueryString["uname"]) {
 		cname = QueryString["uname"];
 	}
-	
+
 	name_html = gid('name').innerHTML;
 	gid('n').value = name = cname;
-	
+
 	//set_tip();
-	
+
 	// 自己ID取得設定
 	post(true);
-	
+
 	noname = noname+"("+(myip.charCodeAt(0,1) + myip.charCodeAt(1,1))+")";
-	
+
 	timerID['stay'] = setTimeout("stay(false)",stayref/2);
-	
+
 	// 初期読み込み
 	head();
-	
+
 	if (flg['stay'])
 	{
 		gid('c').value = "";
@@ -504,7 +507,7 @@ function init()
 	{
 		gid('c').value = msg['howto'];
 	}
-	
+
 	// title 設定(親から継承する)
 	if (QueryString['title'])
 	{
@@ -531,7 +534,7 @@ function init()
 		}
 	}
 	if (flg['popup']){stay(true);}
-	
+
 	//set_logwindow();
 	// なぜか、表示域が調整されないことがあるので念のためもう一度
 	//setTimeout("set_logwindow()",1000);
@@ -566,22 +569,22 @@ function build()
 		onmouseup = log_onscroll;
 	}
 	document.body.appendChild(elm);
-	
+
 	elm = document.createElement("div");
 	elm.id = "log";
 	tag['log'] = null;
 	gid('logbase').appendChild(elm);
-	
+
 	elm = document.createElement("div");
 	elm.id = "last";
 	elm.innerHTML = '<p><span id="last_time">' + msg['last_init'] + '</span>' + tag['refresh'] + tag['popup'] + '</p>';
 	msg['last_init'] = null;
 	document.body.appendChild(elm);
-	
+
 	elm = document.createElement("div");
 	elm.id = "formbase";
 	document.body.appendChild(elm);
-	
+
 	elm = document.createElement("form");
 	with(elm)
 	{
@@ -597,26 +600,26 @@ function build()
 	gid('setting_btn').innerHTML = '<img src="./imgs/setting.png" width="16" height="16" border="0" alt="'+msg['setting']+'" title="'+msg['setting']+'" onclick="setting(\'open\');" style="cursor:pointer;">';
 	gid('face').innerHTML = tag['face'];
 	tag['face'] = null;
-	
+
 	elm = document.createElement("div");
 	elm.id = "color";
 	elm.innerHTML = tag['color'];
 	tag['color'] = null;
 	gid('formbase').appendChild(elm);
-	
+
 	elm = document.createElement("map");
 	elm.id = "spmap";
 	elm.name = "spmap";
 	elm.innerHTML = tag['spmap'];
 	tag['spmap'] = null;
 	document.body.appendChild(elm);
-	
+
 	elm = document.createElement("div");
 	elm.id = "SoundUnit"
 	document.body.appendChild(elm);
-	
+
 	gid('tip').innerHTML = msg['to'].replace('$1',msg['toall']);
-	
+
 	// overlib
 	//elm = document.createElement("div");
 	//elm.id = "overDiv";
@@ -624,7 +627,7 @@ function build()
 	//elm.style.visibility = "hidden";
 	//elm.style.zIndex = 1000;
 	//document.body.appendChild(elm);
-	
+
 	//elm = document.createElement("script");
 	//elm.language = "JavaScript";
 	//elm.src = "overlib.js";
@@ -647,10 +650,10 @@ function log_refresh()
 	}
 	popup_w = null;
 	flg['stop'] = false;
-	
+
 	gid('logbase').style.visibility = "visible";
 	gid('formbase').style.visibility = "visible";
-	
+
 	if (flg['stay']) gid('c').focus();
 	insert = "";
 	head();
@@ -666,13 +669,13 @@ function set_logwindow(scroll)
 		if(document.all)
 		{
 			var dbody = parseInt(document.body.offsetHeight) - 5;
-			
+
 		}
 		else
 		{
 			var dbody = parseInt(window.innerHeight) - 5;
 		}
-		
+
 		gid('stay').style.height = "auto";
 		var logheight = dbody - parseInt(gid('formbase').offsetHeight) - ((staypos == "t")? parseInt(gid('stay').offsetHeight) : 0) - parseInt(gid('last').offsetHeight) - 2;
 		if (logheight)
@@ -729,7 +732,7 @@ function timer()
 	{
 		if (timerID['log']) clearTimeout(timerID['log']);
 	}
-	
+
 	if (!flg['stop'])
 	{
 		timerID['log'] = setTimeout("reload()",(flg['stay'])? refresh : refresh0);
@@ -745,7 +748,7 @@ function stay_timer(val)
 	{
 		if (timerID['stay']) clearTimeout(timerID['stay']);
 	}
-	
+
 	if (!flg['stop'])
 	{
 		timerID['stay'] = setTimeout("stay(false)",((!val)? stayref : val));
@@ -761,7 +764,7 @@ function last_timer()
 	{
 		if (timerID['last']) clearTimeout(timerID['last']);
 	}
-	
+
 	if (!flg['stop'] && lastref)
 	{
 		timerID['last'] = setTimeout("set_last()",lastref);
@@ -777,7 +780,7 @@ function write(v,mode,dust)
 		//なぜか、表示域が調整されないことがあるので念のため後でもう一度
 		if (mode=="init") {setTimeout("set_logwindow(true)",2000);}
 	}
-	
+
 	if (mode == "past")
 	{
 		if (dust) logcache = logcache.substr(dust);
@@ -790,33 +793,33 @@ function write(v,mode,dust)
 	var last_time_tmp = last_time;
 	var last_time_talk_tmp = last_time_talk;
 	var start = 0;
-	
+
 	if (!flg['islogtop'] && mode)
 	{
 		start = 1;
 		logcache = lines[0];
 	}
-	
+
 	var dats = new Array();
 	var cmds = new Array();
 	var dat_cnt = 0;
 	var staychange = 0;
 	var bef_name_tmp = (!mode)? bef_name : "";
-	
+
 	for(var i=start;i<lines.length;i++)
 	{
 		if(!lines[i]){continue}
 		var tmp = lines[i].split("<>");
-		
+
 		var Dt = new Date(tmp[0]*1000).formatTime();
 		if(!tmp[0] || /NaN/.test(Dt) || !tmp[2])
 		{
 			continue;
 		}
-		
+
 		var cmd = "";
 		var systmtalk = false;
-		
+
 		// 前回の発言からの経過時間
 		if (gid('info_time').checked && last_time_tmp)
 		{
@@ -839,13 +842,13 @@ function write(v,mode,dust)
 				bef_name_tmp = "";
 			}
 		}
-		
+
 		// システムメッセージ(旧バージョン用 Ver 1.4 未満)
 		if (tmp[1] && tmp[1].match(/.*(システム通知)\[[\d.]+\].*/))
 		{
 			if (tmp[1].match(/[\d.]+/) <= version){continue;}
 		}
-		
+
 		if (!tmp[1]) {tmp[1] = "";}
 		if (!tmp[6]) {tmp[6] = "";}
 		// In & Out
@@ -855,10 +858,10 @@ function write(v,mode,dust)
 			staychange = 1;
 			tmp[6] = "";
 			cmd = tmp[1] + tmp[2];
-			
+
 			if (!mode && gid('sound_in').checked) {play(sound['in']);}
 			if (!gid('info_in').checked) {continue;}
-			
+
 			tmp[1] = msg['info'];
 			tmp[2] = tmp[2].replace(/([^#]+)#?$/,"$1");
 			tmp[2] = "<span class=\"info\">"+msg['ininfo'].replace('$1',tmp[2])+"</span>";
@@ -880,15 +883,15 @@ function write(v,mode,dust)
 				var outmsg = 'outinfo';
 				cmd = tmp[1] + tmp[2];
 			}
-			
+
 			if (cmds[dat_cnt] == ("_pAsS_" + tmp[2]))
 			{
 				continue;
 			}
-			
+
 			if (!mode && gid('sound_out').checked) {play(sound['out']);}
 			if (!gid('info_out').checked) {continue;}
-			
+
 			tmp[1] = msg['info'];
 			tmp[2] = tmp[2].replace(/([^#]+)#?$/,"$1");
 			tmp[2] = "<span class=\"info\">"+msg[outmsg].replace('$1',tmp[2])+"</span>";
@@ -905,10 +908,10 @@ function write(v,mode,dust)
 		else
 		{
 			last_time_talk_tmp = tmp[0];
-			
+
 			// 無視リストチェック
 			if (!(!filter[tmp[6]])) {continue;}
-			
+
 			// 内緒モードチェック
 			if (tmp[4])
 			{
@@ -940,30 +943,30 @@ function write(v,mode,dust)
 				if (!mode && gid('sound_line').checked) {play(sound['newline']);}
 			}
 		}
-		
+
 		last_time_tmp = tmp[0];
-		
-		
+
+
 		// ipで色のナンバーを決める
 		if (!tmp[3]) tmp[3] = "0.0.0.0";
 		var ip = tmp[3].split(".");
 		var ipc = ip[2] + ip[3];
 		var ipv = "ID:"+tmp[6].substring(0,2)+"...";
 		ipc = parseInt(ipc.toString(8).substring(0,1),8);
-		
+
 		// 色指定あり
 		var style = "";
 		if (tmp[7])
 		{
 			style = " style=\"color:"+tmp[7]+";\"";
 		}
-		
+
 		// コメント欄
 		// メアドらしき文字列はログ表示で表示しない
 		if (mode && !tmp[4]) tmp[2] = tmp[2].replace(/[!~*'();\/?:\@&=+\$,%#\w.-]+@[A-Za-z0-9_-]+\.[A-Za-z0-9_.-]+/g,"<span class=\"info\">"+msg['nomail']+"</span>");
 		// '
 		tmp[2] = log_replace(tmp[2]) + ((tmp[5])? "<span class=\"toname\"> &#187; "+tmp[5]+" ["+tmp[4].substring(0,5)+"]</span>":"");
-		
+
 		if (systmtalk)
 		{
 			dats[dat_cnt++] = [
@@ -1002,11 +1005,11 @@ function write(v,mode,dust)
 	var moretag = (flg['islogtop'])? "" : '<div id="morelog"><a href="javascript:get(\'\',\'past\')" target="_self">'+msg['morelog']+'</a></div>';
 	var welcome_tag = (!flg['show_welcome'] && mode == "init")?'<div id="welcome">'+msg['welcome']+'</div>':'';
 	flg['show_welcome'] = true;
-	
+
 	log.innerHTML = moretag + '<table id="logtable">' + insert + '</table>' + welcome_tag;
-	
+
 	try{log_scroll(mode);}catch(e){}
-	
+
 	if (mode != "past")
 	{
 		last_time = last_time_tmp;
@@ -1020,11 +1023,11 @@ function write(v,mode,dust)
 			gid('last_time').innerHTML = msg['novoice'];
 		}
 	}
-	
+
 	//if (mode == "init" && (!v || last_time_talk == last_time_talk_tmp)){gid('last_time').innerHTML = msg['novoice'];}
 
 	if (!mode && staychange){stay(true);}
-	
+
 	if (!flg['stopscroll'] && insert.length > need_refrash)
 	{
 		stay(true);
@@ -1047,14 +1050,14 @@ function make_name_link(id,name,cl,st,trip)
 {
 	var onclick = "";
 	var lname = (name)? name : u_noname + "("+(id.charCodeAt(0,1) + id.charCodeAt(1,1))+")";
-	
+
 	var name_tmp = lname;
-	
+
 	lname = lname.replace(/([^#]+)#?$/,"$1");
 	vname = lname.replace(/'/g,"\\'");
 	if (!trip) trip = id;
 	trip = (lname != name_tmp)? '<br><span class="trip">'+trip+'</span>' : "";
-	
+
 	if (id)
 	{
 		var ipv = id;
@@ -1111,9 +1114,9 @@ function set_last()
 		sc = msg['bef_day'];
 		past = parseInt(past/24);
 	}
-	
+
 	gid('last_time').innerHTML = msg['last_voice'] + past + sc + " ( "+ Dt + " )";
-	
+
 	if (flg['popup'])
 	{
 		window.status = document.title;
@@ -1126,14 +1129,14 @@ function popup()
 	if (!popup_w || popup_w.closed)
 	{
 		flg['stop'] = true;
-		
+
 		gid('logbase').style.visibility = "hidden";
 		gid('formbase').style.visibility = "hidden";
 		gid('stay').innerHTML = msg['popuping'].replace('$1',tag['refresh']);
 		clearTimeout(timerID['log']);
 		clearTimeout(timerID['stay']);
 		flg['popupping'] = true;
-		
+
 		//try
 		//{
 		//	popup_w = showModelessDialog('./ajaxchat.htm?popup=1&id='+logid+'&stay='+flg['stay']+'&staypos='+staypos,(myip.replace(/[^a-z0-9_]+/ig,"") + logid),'screenX:100;screenY:100;left:100;top:100;width:400;height:300;status:1;scrollbars:0;menubar:0;location:0;directions:0;toolbar:0;resizable:1;');
@@ -1156,14 +1159,14 @@ function log_replace(str)
 	//'
 	// HTMLタグの外側の処理
 	str = str.replace(/(>|^)([^<]+|$)/g,work);
-	
+
 	return str;
-	
+
 	function url(str0,str1)
 	{
 		return "<a href=\""+str1+"\" target=\"_blank\" title=\""+str1+"\">"+str1.substr(0,60)+((str1.length > 60)? "..." : "")+"</a>";
 	}
-	
+
 	function work(str0,str1,str2)
 	{
 		var str = str2;
@@ -1290,7 +1293,7 @@ function set_stay(mod)
 function stay(notimer)
 {
 	gid("status").src = "./imgs/link2.png";
-	
+
 	var x = createXMLHttp();
 	x.onreadystatechange = function()
 	{
@@ -1476,14 +1479,14 @@ function get(opt,mode,dust)
 		}
 		x.open("GET", "seek.php?t="+dtNow.getTime()+"&id="+logid+seek, true);
 	}
-	
+
 	x.send(null);
 }
 // 差分取得
 function reload(opt){
 
 	if (saving && opt != "notimer"){timer();return;}
-	
+
 	gid("status").src = "./imgs/link.png";
 
 	var x = createXMLHttp();
@@ -1514,7 +1517,7 @@ function reload(opt){
 					}
 					var v = x.responseText;
 					x = null;
-					
+
 					if (size_t > size)
 					{
 						size = size_t;
@@ -1590,13 +1593,13 @@ function post(init,cmd)
 		}
 		form.c.value = form.c.value.substr(0,max_post_size);
 	}
-	
+
 	document.body.style.cursor = 'wait';
 	form.c.style.cursor = 'wait';
-	
+
 	if (!cmd) cmd = "";
-	
-	
+
+
 	// 低速なブラウザの為に数発打っておく。効果ある？
 	for ( cnt = 1 ; cnt <= 3 ; cnt++ )
 	{
@@ -1604,27 +1607,27 @@ function post(init,cmd)
 	}
 	saving = true;
 	flg['stopscroll'] = false;
-	
+
 	// 初回POST時
 	name = form.n.value;
-	
+
 	var gn = (name)? "" : "&gn="+encodeURIComponent(noname);
 	var d = "ver="+encodeURIComponent(version)+"&myip="+encodeURIComponent(myip);
-	
+
 	if (!init)
 	{
 		var d = "n="+encodeURIComponent(name)+"&c="+encodeURIComponent(form.c.value)+"&id="+logid+"&tip="+encodeURIComponent(tip)+"&tn="+encodeURIComponent(tname)+"&encode_hint="+encodeURIComponent("ぷ")+"&ver="+encodeURIComponent(version)+"&myip="+encodeURIComponent(myip)+"&color="+encodeURIComponent(color)+"&cmd="+encodeURIComponent(cmd)+gn;
 		cookie_write();
 	}
-	
+
 	form.c.value = "";
-	
+
 	var x = createXMLHttp();
 
 	x.open("POST", "write.php", false);
 	x.setRequestHeader("Content-Type" , "application/x-www-form-urlencoded");
 	x.send(d);
-	
+
 	if(x.status == 200 || x.status == 0)
 	{
 		var arg = x.responseText.split(" ");
@@ -1644,7 +1647,7 @@ function post(init,cmd)
 			}
 			if (!init)
 			{
-				
+
 				flg['post'] = true;
 				var sname = (name)? name : noname;
 				sname = htmlspecialchars(sname);
@@ -1658,7 +1661,7 @@ function post(init,cmd)
 		alert (msg['error_post']);
 	}
 	x = null;
-	
+
 	if (!init && !cmd) gid('c').focus();
 	saving = false;
 	document.body.style.cursor = 'auto';
@@ -1668,7 +1671,7 @@ function post(init,cmd)
 
 function cookie_write()
 {
-	var check = 
+	var check =
 	"\11"+((gid('ent').checked)? "2" : "1")+
 	"\11"+((gid('ten').checked)? "2" : "1")+
 	"\11"+((gid('maru').checked)? "2" : "1")+
@@ -1681,7 +1684,7 @@ function cookie_write()
 	"\11"+((gid('info_in').checked)? "2" : "1")+
 	"\11"+((gid('info_out').checked)? "2" : "1")+
 	"\11"+((gid('info_time').checked)? "2" : "1");
-	
+
 	save_cookie("ajaxchat",((name == noname)? "" : name) + "\11" + color + "\11" + myip + check,((gid('cookie').checked)? 365 : -1),"/");
 }
 
@@ -1691,7 +1694,7 @@ function check()
 	{
 		gid('c').caretPos = document.selection.createRange().duplicate();
 	}
-	
+
 	var str = "";
 	if (gid('ten').checked) {str += "、";}
 	if (gid('maru').checked) {str += "。";}
@@ -1730,7 +1733,7 @@ function leave(nopost)
 function c_onfocus(obj)
 {
 	active_elm = obj;
-	
+
 	if (!flg['stay'])
 	{
 		gid('c').value = "";
@@ -1775,7 +1778,7 @@ function CreateQuetyStringList()
 {
 	if (location.search.length > 1)
 	{
-		var m_Array = location.search.substr(1).split("&"); 
+		var m_Array = location.search.substr(1).split("&");
 		for (idx in m_Array)
 		{
 			temp = m_Array[idx].split("=");
@@ -1798,7 +1801,7 @@ function key_press(e)
 	{
 		try
 		{
-			e.stopPropagation(); 
+			e.stopPropagation();
 			e.preventDefault();
 		}
 		catch(err)
@@ -1825,7 +1828,7 @@ function save_cookie(arg1,arg2,arg3,arg4){ //arg1=dataname arg2=data arg3=expira
 		{
 			_exp ="";
 		}
-		
+
 		if(arg4)
 		{
 			_exp += ";path=" + arg4;
@@ -1834,9 +1837,9 @@ function save_cookie(arg1,arg2,arg3,arg4){ //arg1=dataname arg2=data arg3=expira
 		{
 			_exp += ";path=/";
 		}
-		
+
 		_exp += ";domain=" + escape(document.domain);
-		
+
 		document.cookie = escape(arg1) + "=" + escape(arg2) + _exp + ";";
 	}
 }
@@ -1845,7 +1848,7 @@ function load_cookie(arg){ //arg=dataname
 	if(arg)
 	{
 		cd = document.cookie.split("; ");
-		
+
 		arg = escape(arg);
 		i = 0;
 		while (cd[i])
@@ -1887,14 +1890,14 @@ function set_color(col,init)
 		if (!init && flg['stay']) gid('c').focus();
 		return;
 	}
-	
+
 	if (col == "X")
 	{
 		obj.style.visibility = "hidden";
 		if (!init && flg['stay']) gid('c').focus();
 		return;
 	}
-	
+
 	if (col == "C")
 	{
 		color = "";
@@ -1925,7 +1928,7 @@ function log_onscroll()
 	{
 		flg['stopscroll'] = false;
 	}
-	
+
 }
 
 function ins_face(v)

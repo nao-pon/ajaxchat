@@ -5,4 +5,4 @@ var ajaxchat_url = (!ajaxchat_url)? './' : ajaxchat_url;
 var ajaxchat_cookie_domain_up = (!ajaxchat_cookie_domainlevel_up || ajaxchat_cookie_domainlevel_up != "on")? "off" : "on";
 
 var ajaxchat_title = encodeURIComponent(document.title);
-document.write('<iframe src="'+ajaxchat_url+'ajaxchat.htm?id='+ajaxchat_id+'&amp;staypos='+ajaxchat_staypos+'&amp;title='+ajaxchat_title+'&amp;cdu='+ajaxchat_cookie_domain_up+'" width="100%" height="'+ajaxchat_height+'" style="border:none;" frameborder="0" border="0" allowtransparency="true" scrolling="no"></iframe>');
+document.write('<iframe src="'+ajaxchat_url+'ajaxchat.htm?id='+ajaxchat_id+'&amp;staypos='+ajaxchat_staypos+'&amp;title='+ajaxchat_title+'&amp;cdu='+ajaxchat_cookie_domain_up+'&amp;lang='+ajaxchat_lang+'" width="100%" height="'+ajaxchat_height+'" style="border:none;" frameborder="0" border="0" allowtransparency="true" scrolling="no"></iframe>');

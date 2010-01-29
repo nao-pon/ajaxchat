@@ -1,40 +1,40 @@
-y–¼    Ìz
+ã€å    ç§°ã€‘
 
 AjaxChat
 
-y“o ˜^ –¼z
+ã€ç™» éŒ² åã€‘
 
 ajaxchat_[Version].zip
 
-y§ìŽÒ–¼z
+ã€åˆ¶ä½œè€…åã€‘
 
 nao-pon
 http://hypweb.net/
 http://hypweb.net/xoops/modules/pukiwiki/2211.html
 
-Œ´ˆÄ: Å‘¬ƒCƒ“ƒ^[ƒtƒF[ƒXŒ¤‹†‰ï
+åŽŸæ¡ˆ: æœ€é€Ÿã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ç ”ç©¶ä¼š
 http://la.ma.la/blog/diary_200507290022.htm
 
-y“®ìŠÂ‹«z
+ã€å‹•ä½œç’°å¢ƒã€‘
 
-ƒT[ƒo[ŠÂ‹«: PHP‚ª“®ì‚·‚éƒT[ƒo[
-Šm”FÏ‚ÝƒNƒ‰ƒCƒAƒ“ƒgŠÂ‹«: InternetExplorer 6, FireFox 1.07(Windows), Opera 8.5(Windows)
+ã‚µãƒ¼ãƒãƒ¼ç’°å¢ƒ: PHPãŒå‹•ä½œã™ã‚‹ã‚µãƒ¼ãƒãƒ¼
+ç¢ºèªæ¸ˆã¿ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆç’°å¢ƒ: InternetExplorer 6, FireFox 1.07(Windows), Opera 8.5(Windows)
 
-yŽí    •Êz
+ã€ç¨®    åˆ¥ã€‘
 
-ƒtƒŠ[ƒEƒFƒA
+ãƒ•ãƒªãƒ¼ã‚¦ã‚§ã‚¢
 
-yŠT    —vz
+ã€æ¦‚    è¦ã€‘
 
-Ajax‹Zp‚ð—˜—p‚µ‚½ JavaScript + PHP ‚É‚æ‚éŒy‰õƒ`ƒƒƒbƒgƒvƒƒOƒ‰ƒ€‚Å‚·B
+AjaxæŠ€è¡“ã‚’åˆ©ç”¨ã—ãŸ JavaScript + PHP ã«ã‚ˆã‚‹è»½å¿«ãƒãƒ£ãƒƒãƒˆãƒ—ãƒ­ã‚°ãƒ©ãƒ ã§ã™ã€‚
 
-yƒCƒ“ƒXƒg[ƒ‹z
+ã€ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã€‘
 
-‰ð“€‚µ‚½ƒtƒ@ƒCƒ‹ˆêŽ®‚ðƒT[ƒo[‚ÉƒAƒbƒvƒ[ƒh‚µAlog, stay, bak ƒfƒBƒŒƒNƒgƒŠ‚Ìƒp[ƒ~ƒbƒVƒ‡ƒ“‚ð 777 ‚È‚ÇAhttpd(Apache) ‚ªƒtƒ@ƒCƒ‹‚ðì¬‚Å‚«‚éŒ ŒÀ‚ð—^‚¦‚Ä‚­‚¾‚³‚¢B
+è§£å‡ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ä¸€å¼ã‚’ã‚µãƒ¼ãƒãƒ¼ã«ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ã—ã€log, stay, bak ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚’ 777 ãªã©ã€httpd(Apache) ãŒãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã§ãã‚‹æ¨©é™ã‚’ä¸Žãˆã¦ãã ã•ã„ã€‚
 
-yŽg—p•û–@z
+ã€ä½¿ç”¨æ–¹æ³•ã€‘
 
-Webƒy[ƒW‚©‚çA‰º‹L‚Ì JavaScript ‚Æ <iframe>‚ÅŒÄ‚Ño‚µ‚Ü‚·B
+Webãƒšãƒ¼ã‚¸ã‹ã‚‰ã€ä¸‹è¨˜ã® JavaScript ã¨ <iframe>ã§å‘¼ã³å‡ºã—ã¾ã™ã€‚
 
 <!--========== AjaxChat Start ==========-->
 <script type="text/javascript">
@@ -54,8 +54,13 @@ Webƒy[ƒW‚©‚çA‰º‹L‚Ì JavaScript ‚Æ <iframe>‚ÅŒÄ‚Ño‚µ‚Ü‚·B
 </noscript>
 <!--========== AjaxChat End ==========-->
 
-:ƒpƒ‰ƒ[ƒ^‚Ìà–¾:
-ajaxchat_url     = 'ajaxchat.htm ‚Ì URL(ŠO•”ƒT[ƒo[‚Å‚à‰Â)';
-ajaxchat_id      = [®”’l]; ®”’l‚ð•Ï‚¦‚é‚±‚Æ‚ÅA•”‰®‚ð‚¢‚­‚Â‚Å‚àì¬‚Å‚«‚Ü‚·B
-ajaxchat_staypos = '[t|r]';  ‰{——ŽÒî•ñ‚Ì‰ŠúˆÊ’u t=ã•”(È—ªŽž), r=¶ƒTƒCƒh
-ajaxchat_height  = [®”’l]; ƒ`ƒƒƒbƒg•”•ª‚Ì‚‚³(px)
+:ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®èª¬æ˜Ž:
+ajaxchat_url     = 'ajaxchat.htm ã® URL(å¤–éƒ¨ã‚µãƒ¼ãƒãƒ¼ã§ã‚‚å¯)';
+ajaxchat_id      = [æ•´æ•°å€¤]; æ•´æ•°å€¤ã‚’å¤‰ãˆã‚‹ã“ã¨ã§ã€éƒ¨å±‹ã‚’ã„ãã¤ã§ã‚‚ä½œæˆã§ãã¾ã™ã€‚
+ajaxchat_staypos = '[t|r]';  é–²è¦§è€…æƒ…å ±ã®åˆæœŸä½ç½® t=ä¸Šéƒ¨(çœç•¥æ™‚), r=å·¦ã‚µã‚¤ãƒ‰
+ajaxchat_height  = [æ•´æ•°å€¤]; ãƒãƒ£ãƒƒãƒˆéƒ¨åˆ†ã®é«˜ã•(px)
+
+=================================
+Spanish translation by la9una
+rauljesusl@gmail.com
+=================================
